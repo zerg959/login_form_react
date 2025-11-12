@@ -1,73 +1,53 @@
-# React + TypeScript + Vite
+# HEXY-LOGIN-PAGE-MAIN
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Этот проект представляет собой реализацию экрана авторизации (включая двухфакторную аутентификацию)
+## Функциональность
 
-Currently, two official plugins are available:
+- **Экран входа (Email + Пароль)**:
+  - Валидация ввода (Email, Пароль).
+  - Обработка ошибок API: неверные учетные данные, пользователь не найден, аккаунт заблокирован.
+- **Экран двухфакторной аутентификации (2FA)**:
+  - Ввод 6-значного кода.
+  - Автофокус между полями ввода.
+  - Обработка ошибок API: неверный код, код просрочен, слишком много попыток.
+- **Экран успеха**:
+  - Отображается после успешной авторизации.
+  - Возможность выйти и вернуться к экрану входа.
+- **Моки API**:
+  - Реализованы с использованием `@tanstack/react-query`.
+  - Покрывают все сценарии, включая успешные и неуспешные запросы.
+- **Обработка ошибок**:
+  - Все возможные ошибки API и валидации отображаются пользователю
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## React Compiler
+## Установка и запуск
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1.  Убедитесь, что у вас установлен Node.js (рекомендуется версия 20.19+ или 22.12+ для корректной работы Vite).
+2.  Склонируйте репозиторий:
+    ```bash
+    git clone <URL_ВАШЕГО_РЕПОЗИТОРИЯ>
+    cd login_form_react
+    ```
+3.  Установите зависимости:
+    ```bash
+    npm install
+    ```
+4.  Запустите приложение в режиме разработки:
+    ```bash
+    npm run dev
+    ```
+5.  Откройте браузер и перейдите по адресу, указанному в терминале (обычно `http://localhost:5173`).
 
-## Expanding the ESLint configuration
+## Использование моков
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Для демонстрации различных сценариев можно использовать следующие учетные данные:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **Успешный вход с 2FA**: `email: user@example.com`, `password: password123`. Затем введите `123456` на экране 2FA.
+- **Успешный вход без 2FA**: `email: direct@example.com`, `password: password123`.
+- **Неверные учетные данные**: `email: wrong@example.com`, `password: wrongpassword`.
+- **Пользователь не найден**: `email: notfound@example.com`, `password: password123`.
+- **Аккаунт заблокирован**: `email: locked@example.com`, `password: password123`.
+- **Неверный 2FA код**: `000000`.
+- **Просроченный 2FA код**: `999999`.
+- **Слишком много попыток 2FA**: `777777`.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
